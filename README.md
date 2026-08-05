@@ -1,21 +1,21 @@
 #  Monte Carlo Simulation for Non-Ideal Flow in Packed Bed Reactors
 
 ## Overview
-Fluid flow in real chemical reactors seldom exhibits perfectly ideal behavior. In actual systems, reactors often experience non-ideal flow due to incomplete mixing, dead zones, channeling, and regions of stagnation [cite: 10]. These flow anomalies distort the Residence Time Distribution (RTD) and negatively impact conversion efficiency and selectivity [cite: 10]. 
+Fluid flow in real chemical reactors seldom exhibits perfectly ideal behavior. In actual systems, reactors often experience non-ideal flow due to incomplete mixing, dead zones, channeling, and regions of stagnation. These flow anomalies distort the Residence Time Distribution (RTD) and negatively impact conversion efficiency and selectivity. 
 
-This repository provides a flexible, "bottom-up" **Monte Carlo simulation framework** to model particle paths in non-ideal Packed Bed Reactors (PBR) [cite: 10]. By tracking thousands of individual fluid particles on a 2D grid, this tool simulates macroscopic flow behavior and generates reliable RTD curves [cite: 10]. It bridges the gap between theoretical ideal reactor models and realistic hydrodynamics.
+This repository provides a flexible, "bottom-up" **Monte Carlo simulation framework** to model particle paths in non-ideal Packed Bed Reactors (PBR). By tracking thousands of individual fluid particles on a 2D grid, this tool simulates macroscopic flow behavior and generates reliable RTD curves. It bridges the gap between theoretical ideal reactor models and realistic hydrodynamics.
 
 ---
 
 ## The Monte Carlo Particle Framework
-Unlike traditional dispersion or tanks-in-series analytical models, this Monte Carlo approach simulates multi-dimensional flow based on a sequence of probabilistic rules applied to each particle at every time step [cite: 10].
+Unlike traditional dispersion or tanks-in-series analytical models, this Monte Carlo approach simulates multi-dimensional flow based on a sequence of probabilistic rules applied to each particle at every time step.
 
-The reactor is modeled as a 2D grid (default dimensions: $100 \times 20$) [cite: 10]. At each time step, a particle undergoes:
-1. **Dead Zone Trapping:** Particles entering a defined "dead zone" have a probability (`P_STAY_DEAD_ZONE`) of getting trapped for that time step [cite: 8, 10].
-2. **Convection & Channeling:** Free particles move forward by basic convection. If they are in a designated high-velocity channeling region (e.g., near the reactor wall), they receive an extra speed boost [cite: 8, 10].
-3. **Dispersion:** Independent random numbers dictate axial (forward/backward) and radial (side-to-side) dispersion probabilities (`P_DISP_AXIAL` and `P_DISP_RADIAL`) [cite: 8, 10].
+The reactor is modeled as a 2D grid (default dimensions: $100 \times 20$). At each time step, a particle undergoes:
+1. **Dead Zone Trapping:** Particles entering a defined "dead zone" have a probability (`P_STAY_DEAD_ZONE`) of getting trapped for that time step.
+2. **Convection & Channeling:** Free particles move forward by basic convection. If they are in a designated high-velocity channeling region (e.g., near the reactor wall), they receive an extra speed boost.
+3. **Dispersion:** Independent random numbers dictate axial (forward/backward) and radial (side-to-side) dispersion probabilities (`P_DISP_AXIAL` and `P_DISP_RADIAL`).
 
-By aggregating the exit times of $N=5000$ to $10,000$ particles, the simulation generates a highly accurate RTD histogram $E(t)$ [cite: 10].
+By aggregating the exit times of $N=5000$ to $10,000$ particles, the simulation generates a highly accurate RTD histogram $E(t)$.
 
 ---
 
@@ -24,20 +24,20 @@ By aggregating the exit times of $N=5000$ to $10,000$ particles, the simulation 
 This simulation tool is designed for practical reactor analysis, scale-up, and troubleshooting:
 
 ### 1. Predicting Conversion Loss Due to Structural Defects
-By simulating an RTD for a given configuration, you can use the segregated flow model to estimate the absolute conversion for a 1st-order reaction [cite: 10]. The repository evaluates reactor **Effectiveness**—comparing the simulated non-ideal conversion directly against an ideal Plug Flow Reactor (PFR) with the exact same mean residence time [cite: 4, 10]. This highlights exactly how much performance is lost to poor fluid dynamics.
+By simulating an RTD for a given configuration, you can use the segregated flow model to estimate the absolute conversion for a 1st-order reaction. The repository evaluates reactor **Effectiveness**—comparing the simulated non-ideal conversion directly against an ideal Plug Flow Reactor (PFR) with the exact same mean residence time. This highlights exactly how much performance is lost to poor fluid dynamics.
 
 ### 2. Modeling Packed Beds via Stochastic Dead Zones
-Real packed beds don't have single, large "rectangular" dead zones. Instead, flow anomalies are distributed. The `generate_stochastic_map` function allows you to assign a uniform density of "sticky" regions across the entire reactor grid [cite: 3]. This realistically mimics the irregular fluid pathways through a porous catalyst bed, showing how micro-channeling and random stagnation average out into a broad RTD peak [cite: 10].
+Real packed beds don't have single, large "rectangular" dead zones. Instead, flow anomalies are distributed. The `generate_stochastic_map` function allows you to assign a uniform density of "sticky" regions across the entire reactor grid [cite: 3]. This realistically mimics the irregular fluid pathways through a porous catalyst bed, showing how micro-channeling and random stagnation average out into a broad RTD peak.
 
 ### 3. The "Inverse Problem": Diagnosing Real-World Reactors
-In real life, engineers perform tracer tests to get an RTD, rather than simulating it from scratch. The provided `find_non_ideality_parameter` function uses a binary search algorithm to reverse-engineer reactor conditions [cite: 1, 10]. By inputting an experimental mean residence time and variance, the script computationally finds the internal stickiness/dead-zone probability (`p_stay`) that best fits your real-world data [cite: 1, 10].
+In real life, engineers perform tracer tests to get an RTD, rather than simulating it from scratch. The provided `find_non_ideality_parameter` function uses a binary search algorithm to reverse-engineer reactor conditions. By inputting an experimental mean residence time and variance, the script computationally finds the internal stickiness/dead-zone probability (`p_stay`) that best fits your real-world data.
 
 ---
 
 ## How to Use the Repository
 
 ### Core Parameters
-The main simulation functions accept the following core parameters [cite: 8]:
+The main simulation functions accept the following core parameters:
 * `N_PARTICLES`: Number of particles to simulate (Recommended: 5000 - 10000 for smooth distributions).
 * `P_DISP_AXIAL`: Base probability of axial mixing (default: `0.2`).
 * `P_DISP_RADIAL`: Base probability of radial mixing (default: `0.3`).
@@ -63,7 +63,7 @@ plt.show()
 ```
 
 ### 2. Using the Stochastic Map Generator
-To model a realistic packed bed, generate a stochastic map and pass it to the simulation [cite: 3].
+To model a realistic packed bed, generate a stochastic map and pass it to the simulation.
 
 ```python
 from reactor_sim import generate_stochastic_map, run_simulation
@@ -87,7 +87,7 @@ plt.show()
 ```
 
 ### 3. Solving the Inverse Problem (Parameter Fitting)
-If you have practical RTD data (Mean Time and Variance), use the solver to find the reactor's non-ideality parameter [cite: 1, 10].
+If you have practical RTD data (Mean Time and Variance), use the solver to find the reactor's non-ideality parameter.
 
 ```python
 from inverse_solver import find_non_ideality_parameter
@@ -108,8 +108,8 @@ print(f"Fit Quality: {conclusion}")
 ```
 
 ## Summary of Flow Profiles
-The framework allows for comparative studies of various physical setups [cite: 7]:
-* **Dispersion Only (Base Reactor):** Models natural axial/radial spread, resulting in a narrow Gaussian RTD with low variance [cite: 10].
-* **Channeling Only:** Results in a bimodal distribution where a fast peak bypasses the main flow [cite: 10].
-* **Dead Zone Only:** Creates a distinct "tail" in the RTD, significantly increasing mean time and variance [cite: 10].
-* **Laminar Flow vs. Plug Flow:** The code can optionally switch base convection to a parabolic laminar flow profile to evaluate systematic vs. structural flaws [cite: 5, 10].
+The framework allows for comparative studies of various physical setups:
+* **Dispersion Only (Base Reactor):** Models natural axial/radial spread, resulting in a narrow Gaussian RTD with low variance.
+* **Channeling Only:** Results in a bimodal distribution where a fast peak bypasses the main flow.
+* **Dead Zone Only:** Creates a distinct "tail" in the RTD, significantly increasing mean time and variance.
+* **Laminar Flow vs. Plug Flow:** The code can optionally switch base convection to a parabolic laminar flow profile to evaluate systematic vs. structural flaws.
